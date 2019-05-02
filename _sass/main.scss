@@ -1,0 +1,36 @@
+main.index{
+	
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 960px;
+	align-self: center;
+	
+	.note{
+		p{
+			font-family: "Roboto Slab", serif;
+			font-size: 30px;
+			padding: 10px 30px;
+		}
+	}
+	
+	.mini-gallery{
+		
+		ul{
+			margin: 0;
+			padding: 0;
+			column-count: 3;
+			column-gap: 0;
+		}
+		
+		li{
+			list-style: none;
+			line-height:0;
+		}
+		
+		img{
+			width: 100%;
+			object-fit: cover;
+			height: 130px;
+		}
+	}
+}
