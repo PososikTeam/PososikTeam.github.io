@@ -1,4 +1,10 @@
 ---
-layout: default
-categories: lab
+categories: blog3
+layout: post
 ---
+
+<p>This labs is about python language and bigdata.<br>
+    <a href="https://wolodyx.github.io/2019/03/12/skt-labs.html" >
+        Link on task.
+    </a>
+</p>

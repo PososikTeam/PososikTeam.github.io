@@ -1,4 +1,14 @@
 ---
+premalink: lab/
 layout: default
 ---
-<h1>labs</h1>
+<main class="blog">
+    <p>This page is created for show my homework =)</p>
+    <ul>
+        {% for post in site.categories.blog3 %}
+        <li><a href="{{ post.url }}">{{ post.title }} {{ post.date | date: '%B %d, %Y'}}</a></li>
+        {% endfor %}
+    </ul>
+
+
+</main>

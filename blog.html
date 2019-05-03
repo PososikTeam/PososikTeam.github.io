@@ -1,14 +1,20 @@
 ---
+premalink: blog/
 layout: default
 ---
 
-<main>
-    <h1>blog</h1>
+<main class="blog">
+    <p>If there are only three steps to the goal, you might think that everything has been done,
+        but if you think so, you lose ... </p>
 
-    {% for post in site.posts %}
+    <p>In this section I'll try to show you my life.</p>
 
-    <a href="{{post.url}}">{{post.title}}</a>
+    <ul>
+        {% for post in site.categories.blog1  %}
+        <li><a href="{{ post.url }}">{{ post.title }} {{ post.date | date: '%B %d, %Y'}} </a></li>
+        {% endfor %}
+    </ul>
 
-    {% endfor %}
+
 </main>
 

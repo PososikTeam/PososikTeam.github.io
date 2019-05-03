@@ -34,3 +34,31 @@ main.index{
 		}
 	}
 }
+
+main.blog{
+	margin-top:5%;
+	p{
+	font-family: "Roboto Slab", serif;
+	font-size: 30px;
+	padding: 10px 30px;
+	}
+
+	a{
+	color: #d6dbff;
+	text-decoration: none;
+	&:hover{
+	border-bottom: 2px solid red;
+	color: rgba(red, .8);
+	}
+	}
+
+	img{
+		height: 300px;
+		width: 300px;
+		border: 2px solid #d6dbff;
+		box-shadow: 0 0 15px rgba(#d6dbff, .6);
+		float: right;
+	}
+
+
+}

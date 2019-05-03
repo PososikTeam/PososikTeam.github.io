@@ -1,0 +1,37 @@
+---
+layout: post
+categories: blog1
+---
+
+<p>Hi friends my name is Rashit Bayazitov. I'm from Kazan it's city in Russian Federation =)<br>
+
+</p>
+<br/>
+
+![Image description](/assets/images/school.jpg)
+
+
+<p>I finished my studies at the Kazan gumnasium with Tatar language of education at 18,
+you can see it a little right.</p>
+
+<br/>
+<br/>
+<br/>
+
+
+![Image description](/assets/images/kfu.jpg)
+
+<br/>
+<p>
+Then I entered the Kazan Federal University and graduated in 2018 with honors =)
+I studied at the faculty of mathematics and mechanics, by specialty of mathematics and cmputer science.
+</p>
+
+<br/>
+        ![Image description](/assets/images/basket.jpg)
+
+<p>I love basketball, played basketball all the time. I played on school and faculty teams.</p>
+
+
+
+<br/>
