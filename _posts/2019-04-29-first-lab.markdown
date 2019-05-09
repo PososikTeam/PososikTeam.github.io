@@ -8,3 +8,281 @@ layout: post
         Link on task.
     </a>
 </p>
+
+{% highlight python %}
+%config IPCompleter.greedy=True
+import csv
+
+authorsEmail = {}
+commit_count = 0
+with open( "calculator.history", "rt" ) as file:
+    reader = csv.reader( file )
+
+    for row in reader:
+        name = row[0]
+        email = row[1]
+        commit_count += 1
+
+        if name not in authorsEmail:
+            authorsEmail[ name ] = []
+
+        emailList = authorsEmail[ name ]
+
+        if email not in emailList:
+            emailList.append( email )
+
+print("Всего имеются ",len(authorsEmail), "разработчика и ", commit_count," коммита.")
+
+
+
+#три ведущих разработчика
+authorsNumCommit = {}
+with open( "calculator.history", "rt" ) as file:
+    reader = csv.reader( file )
+
+    for row in reader:
+        name = row[0]
+
+        if name not in authorsNumCommit:
+            authorsNumCommit[ name ] = 0
+
+        authorsNumCommit[ name ] +=1
+
+ 
+sorted_arr = sorted(authorsNumCommit.items(), key=lambda arr: arr[1])
+print("\nТри ведущих разработчика: ")
+for authors in sorted_arr[-3:]:
+    print('\t',authors[0])
+    
+    
+Out[]:
+
+Всего имеются  42 разработчика и  193  коммита.
+
+Три ведущих разработчика: 
+	 Michał Janiszewski
+	 Rudy Huyn
+	 Matt Cooley
+{% endhighlight %}
+
+{% highlight python %}
+from datetime import datetime
+# git log --date=local --pretty=format:"%an,%ae,%ad" > historyFileName.txt
+
+historyFileName = "historyFileName.txt"
+
+historyData = [] # Результат разбора файла в формате [name, email, date]
+
+with open( historyFileName, "rt" ) as file:
+    reader = csv.reader( file, delimiter=',' )
+
+    for row in reader:
+        name = row[0]
+        email = row[1]
+        date = datetime.strptime(row[2], '%a %b %d %H:%M:%S %Y')
+
+        historyData.append( (name, email, date) )
+
+
+minDate = datetime.today()
+maxDate = datetime( 1900, 1, 1 )
+for commit in historyData:
+    date = commit[2]
+    if minDate > date:
+        minDate = date
+    if maxDate < date:
+        maxDate = date
+
+print ("Project beginning ", minDate)
+print ("Project ending ", maxDate)
+
+#Таблица разработчик, электронные адреса, время работы - начало и конец;
+sorted_history_arr = sorted(historyData, key=lambda arr: arr[0])
+table = []
+buff = list([sorted_history_arr[0][0],sorted_history_arr[0][1], sorted_history_arr[0][2],sorted_history_arr[0][2]])
+i=1
+while i <  len(sorted_history_arr):
+    data = sorted_history_arr[i]
+    if(buff[0]==data[0]):
+        if(data[2]<buff[2] or data[2] > buff[3]):
+            if(data[2]<buff[2]):
+                buff[2] = data[2]
+            else:
+                buff[3] = data[2]
+    else:
+        table.append(buff)
+        buff = list([data[0],data[1],data[2], data[2]])
+    i+=1
+        
+print("\nТаблица разработчик, электронные адреса, время работы - начало и конец: \n")
+for row in table:
+    print(row[0], "".join(authorsEmail[row[0]]), row[2], " - ", row[3])
+
+    
+#График количество коммитов по месяцам
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+mon = [0]*12
+
+for data in historyData:
+    month_num = data[2].month - 1
+    mon[month_num] += 1
+    
+data_y = mon
+data_x = np.arange(12)+1
+
+plt.plot(data_x, data_y)
+plt.title('Количество коммитов по месяцам')
+plt.ylabel('Коммиты')
+plt.xlabel('Месяц')
+plt.show()
+
+#График количество разработчиков по месяцам
+
+developers = [0]*12
+
+#месяц разработчики словарь
+dict_mon_dev = {}
+for data in historyData:
+    cur_mon = data[2].month - 1
+    cur_dev = data[0]
+    if cur_mon not in dict_mon_dev:
+        dict_mon_dev[ cur_mon ] = []
+        
+    cur_list = dict_mon_dev[ cur_mon ]
+
+    if cur_dev not in cur_list:
+        cur_list.append( cur_dev )
+          
+i=0
+while i<12:
+    if(dict_mon_dev.get(i)):
+        developers[i] = len(dict_mon_dev[i])
+    else:
+        developers[i] = 0
+    i += 1
+    
+data_y = developers
+data_x = np.arange(12)+1
+
+plt.plot(data_x, data_y)
+plt.title('Количество коммитов разработчиков по месяцам')
+plt.ylabel('Разработчики')
+plt.xlabel('Месяц')
+plt.show()
+
+Out[]:
+
+Project beginning  2019-01-28 19:55:50
+Project ending  2019-05-03 01:48:33
+
+Таблица разработчик, электронные адреса, время работы - начало и конец: 
+
+Barry Langer  barlan@microsoft.com 2019-03-06 21:17:27  -  2019-03-06 21:17:27
+Bharat Raghunathan  bharatraghunthan9767@gmail.com 2019-04-23 19:30:31  -  2019-04-23 19:30:31
+Brandon Williams  willibrandon@gmail.com 2019-03-16 02:45:49  -  2019-03-16 02:45:49
+Brett Waldbaum  39069036+bwaldbaum@users.noreply.github.com 2019-02-27 02:15:48  -  2019-03-09 09:15:28
+Christian Oliff  christianoliff@yahoo.com 2019-03-07 20:02:44  -  2019-03-07 20:02:44
+Cyril  cyril.garsaud@gmail.com 2019-03-18 21:31:04  -  2019-03-18 21:31:04
+Daniel Belcher  dabelc@microsoft.com 2019-02-14 03:30:03  -  2019-05-03 01:48:33
+Dave Grochocki  grochocki@users.noreply.github.com 2019-03-20 23:13:57  -  2019-04-10 02:36:36
+David Grochocki  grochocki@users.noreply.github.com 2019-02-05 07:23:36  -  2019-02-26 01:56:35
+Edward Betts  edward@4angle.com 2019-03-06 22:31:22  -  2019-03-06 22:31:22
+Eric Wong  eriwong@microsoft.com 2019-04-19 02:05:44  -  2019-04-30 21:26:05
+Guillaume Rischard  github@stereo.lu 2019-03-14 01:37:50  -  2019-03-14 01:37:50
+Hassan Uraizee  hauraize@microsoft.com hassan.uraizee@gmail.com 2019-04-26 01:54:36  -  2019-04-30 16:13:46
+Howard Wolosky  HowardWolosky@users.noreply.github.com 2019-01-29 02:24:37  -  2019-03-13 12:34:06
+Jared Fuchs  jsfuchs@users.noreply.github.com 2019-03-06 22:24:21  -  2019-03-06 22:24:21
+Jeff Genovy  29107334+jefgen@users.noreply.github.com 2019-03-13 04:24:37  -  2019-03-13 22:10:14
+Johan Laanstra  jlaanstra1221@outlook.com 2019-03-12 02:04:17  -  2019-03-12 02:04:17
+Josh Koon  45607479+joshkoon@users.noreply.github.com 2019-01-29 05:14:15  -  2019-02-26 00:04:38
+Josh Soref  jsoref@users.noreply.github.com 2019-03-07 04:47:27  -  2019-03-07 20:27:13
+Karan Nandwani  karann@microsoft.com 2019-03-07 17:33:22  -  2019-03-07 17:33:22
+Lance McCarthy  LanceMcCarthy@users.noreply.github.com 2019-03-01 21:40:02  -  2019-04-19 01:01:47
+Lorenz Nickel  mail@lorenznickel.de 2019-03-08 20:28:35  -  2019-03-08 20:28:35
+Matt Cooley  matt@mattcooley.net macool@microsoft.com 2019-01-29 19:49:01  -  2019-04-26 01:54:07
+Michał Janiszewski  janisozaur@users.noreply.github.com janisozaur+signed@gmail.com 2019-03-07 00:21:58  -  2019-04-12 22:40:02
+Microsoft GitHub User  msftgits@microsoft.com 2019-01-28 19:55:50  -  2019-01-28 19:55:50
+Microsoft Open Source  microsoftopensource@users.noreply.github.com 2019-01-28 19:55:53  -  2019-01-28 19:55:54
+Nicholas Baron  35079404+Nicholas-Baron@users.noreply.github.com 2019-04-23 01:59:13  -  2019-04-23 01:59:13
+Nikita Potapenko  dev.potapy4@hotmail.com 2019-03-15 11:06:10  -  2019-03-15 11:06:10
+Oleg Abrazhaev  seyferseed@gmail.com 2019-05-02 20:59:19  -  2019-05-02 20:59:19
+Pepe Rivera  joriv@microsoft.com joseartrivera@gmail.com 2019-02-12 00:51:56  -  2019-05-01 18:26:30
+Petr Sedláček  petrspelos@users.noreply.github.com 2019-03-09 09:47:40  -  2019-03-09 09:47:40
+Rudy Huyn  rudyhuyn@gmail.com 2019-03-07 19:24:34  -  2019-04-27 01:07:14
+Ruige Lee  295054118@qq.com 2019-03-09 09:18:41  -  2019-03-09 09:18:41
+Satya  satyapawank@outlook.com 2019-03-15 06:21:17  -  2019-03-15 06:21:17
+Seulgi Kim  seulgi.kim.56@outlook.com 2019-04-17 02:53:08  -  2019-04-17 02:53:08
+Shamkhal Maharramov  9804406+Maharramoff@users.noreply.github.com 2019-03-09 18:16:05  -  2019-03-21 19:43:59
+Sonali Agrawal  sonali9696@gmail.com 2019-04-03 15:45:47  -  2019-04-03 15:45:47
+Stephanie Anderl  46726333+sanderl@users.noreply.github.com 2019-02-08 22:30:16  -  2019-03-15 01:20:05
+Will  WilliamWelsh@users.noreply.github.com 2019-03-15 08:30:07  -  2019-03-15 08:30:07
+cheezwhines  49319688+cheezwhines@users.noreply.github.com 2019-04-20 03:59:10  -  2019-04-20 03:59:10
+jatinkumar  jatinkumarg17@gmail.com 2019-04-17 02:46:07  -  2019-04-17 02:46:07
+
+
+
+{% endhighlight %}
+
+
+![Image description](/assets/images/first.png)
+![Image description](/assets/images/sec.png)
+
+
+{% highlight python %}
+
+import re
+
+# git log -p > out.txt
+
+historyFileName = 'out.txt'
+history_dict = {}
+# Регулярное выражение ищет строки, начинающие или с '--- a/' или с '+++ b/'
+# и выделяет в таких строках две группы - указанное шаблонное начало и вся
+# остальная строка.
+pattern = re.compile('^(?:--- a/|\+\+\+ b/)([\S]*)$')
+
+with open(historyFileName,'rt') as file:
+    while True:
+        line = file.readline()
+
+        if len(line) == 0:
+            break
+        
+        out = pattern.match( line )     
+
+        if not out:
+            continue
+
+        # Вторая группа в анализируемой строке - путь к файлу
+        # относительно директории проекта.
+        #print (out.group(1))
+        name = out.group(1)
+        if name not in history_dict:
+            history_dict[ name ] = 0
+
+        history_dict[ name ] +=1
+        
+        
+sorted_history_arr = sorted(history_dict.items(), key=lambda arr: arr[1])
+
+print("\nДесять наиболее часто изменяющихся файлов: ")
+for files in sorted_history_arr[-10:]:
+    print('\t',files[0])
+
+Out[]:
+
+Десять наиболее часто изменяющихся файлов: 
+	 src/Calculator/Views/UnitConverter.xaml.cpp
+	 src/CalcManager/ExpressionCommand.cpp
+	 src/CalcViewModel/Common/CopyPasteManager.cpp
+	 src/CalcManager/Ratpack/conv.cpp
+	 src/Calculator/Calculator.vcxproj
+	 README.md
+	 src/CalcManager/CEngine/History.cpp
+	 src/CalcManager/CalculatorManager.cpp
+	 src/CalcViewModel/StandardCalculatorViewModel.cpp
+	 src/CalcManager/CEngine/scicomm.cpp
+{% endhighlight %}
