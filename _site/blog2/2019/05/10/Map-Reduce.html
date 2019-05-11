@@ -57,6 +57,50 @@
 <span class="err">Причем</span> <span class="err">разные</span> <span class="n">mapper</span><span class="o">-</span><span class="err">ы</span> <span class="err">могут</span> <span class="err">перейти</span> <span class="err">в</span> <span class="err">один</span> <span class="n">reducer</span><span class="o">,</span> <span class="err">если</span> <span class="err">у</span> <span class="err">них</span> <span class="err">одинаковый</span> <span class="n">KEY</span>
 <span class="mi">7</span><span class="o">)</span> <span class="err">Результат</span> <span class="err">пишется</span> <span class="err">в</span> <span class="n">output</span> <span class="n">file</span></code></pre></figure>
 
+<p><img src="/assets/images/MapReduce-03.jpg" class="center" /></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">Так</span> <span class="err">как</span> <span class="err">воркеры</span> <span class="err">не</span> <span class="err">могут</span> <span class="err">передавать</span> <span class="err">информацию</span> <span class="err">друг</span> <span class="err">другу</span> <span class="err">то</span> <span class="err">сплиты</span> <span class="err">должны</span>
+<span class="err">быть</span> <span class="err">независимыми</span><span class="o">,</span> <span class="err">обычно</span> <span class="err">делятся</span> <span class="err">по</span> <span class="err">блокам</span> <span class="err">в</span> <span class="n">hdfs</span><span class="o">.</span> <span class="err">Так</span> <span class="err">как</span> <span class="err">архивы</span> <span class="err">нельзя</span> 
+<span class="err">разделить</span> <span class="err">независимо</span> <span class="err">то</span> <span class="err">каждый</span> <span class="err">архив</span> <span class="err">обрабатывается</span> <span class="err">одним</span> <span class="err">воркером</span><span class="o">.</span></code></pre></figure>
+
+<h3>Data locality - в hdfs данные лежат на локальном диске и чтобы обработка была 
+максимально быстрой, то делается так чтобы воркер запускался на той машине где лежит сплит
+если это возможно.
+</h3>
+
+<p><img src="/assets/images/MapReduce-04.jpg" class="center" /></p>
+<h3>Промежуточные данные не хранятся в HDFS так как при этом нужно производить
+репликацию данных, что очень затратно. Если произошёл сбой и данные потерялись,
+то просто перезапускается воркер</h3>
+<h3>Shuffle - процесс копирования с мапперов в редюсеры</h3>
+
+<p><img src="/assets/images/MapReduce-05.jpg" class="center" /></p>
+<h3> 
+Количество выходных данных равно количеству редюсеров. Редюсер может писать только в один файл.
+Данные не теряются т.к хранятся уже в HDFS.
+</h3>
+<h3>
+Чем больше редюсеров тем меньше данных будет обрабатывать конкретный воркер, 
+но мы можем получить случай когда основное время уходит на запуск редюсера 
+по сравнению с подсчётом задачи и редюсеры будут просто ждать своей очереди
+что не есть эффективно. На практике принимается баланс обычно<h2>500Mb - 1.5Gb</h2>
+</h3>
+<p><img src="/assets/images/MapReduce-06.jpg" class="center" /></p>
+<h3>Данная парадигма поможет если мапперы работает более суток, тогда 
+если какой-то маппер упал его надо перезапускать и задача может считаться неделю
+хотя должна считаться сутки, для этого мы считаем отдельно фазу мап и фазу редюс.
+А уже в фазе мап мв храним в HDFS резапускать ничего не нужно.</h3>
+
+<h2>Полная схема Map-Reduce программ.</h2>
+<p><img src="/assets/images/MapReduce-07.jpg" class="center" /></p>
+<h3>User Program - включает в себя входную и выходную директорию, функцию мап и функцию редюс.
+Все это передаётся Мастеру.
+</h3>
+<h3>Мастер считывает данные из входного пути и определяет: Количество сплитов, 
+сколько воркеров будет и какие данные отправлять воркерам, воркеры отправляют данные мастеру о своей работе,
+причем если маппер упал то мастер перезапускает его, далее копируются данные в локальные диски,
+далее шафл и мастер запускает редюсеры и также слидит за ними.
+</h3>
 
 
 </main>
