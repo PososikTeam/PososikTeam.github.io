@@ -8,18 +8,18 @@ categories: blog1
 </p>
 <br/>
 
-![Image description](/assets/images/school.jpg)
+<img  src = '/assets/images/school.jpg'>
 
 
 <p>I finished my studies at the Kazan gumnasium with Tatar language of education at 18,
-you can see it a little right.</p>
+you can see it a little lower.</p>
 
 <br/>
 <br/>
 <br/>
 
 
-![Image description](/assets/images/kfu.jpg)
+<img src = '/assets/images/kfu.jpg'>
 
 <br/>
 <p>
@@ -28,7 +28,7 @@ I studied at the faculty of mathematics and mechanics, by specialty of mathemati
 </p>
 
 <br/>
-        ![Image description](/assets/images/basket.jpg)
+<img  src = '/assets/images/basket.jpg'>
 
 <p>I love basketball, played basketball all the time. I played on school and faculty teams.</p>
 

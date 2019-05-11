@@ -9,7 +9,10 @@ layout: post
     </a>
 </p>
 
-{% highlight python %}
+
+<div class="scroll">
+{% highlight python linenos %}
+
 %config IPCompleter.greedy=True
 import csv
 
@@ -63,7 +66,12 @@ Out[]:
 	 Michał Janiszewski
 	 Rudy Huyn
 	 Matt Cooley
+	 
+
 {% endhighlight %}
+</div>
+
+
 
 {% highlight python %}
 from datetime import datetime

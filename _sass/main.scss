@@ -52,12 +52,19 @@ main.blog{
 	}
 	}
 
-	img{
+	img.right{
 		height: 300px;
 		width: 300px;
 		border: 2px solid #d6dbff;
 		box-shadow: 0 0 15px rgba(#d6dbff, .6);
 		float: right;
+	}
+
+	img{
+		width: 100%;
+		height: auto;
+		border: 2px solid #d6dbff;
+		box-shadow: 0 0 15px rgba(#d6dbff, .6);
 	}
 
 
