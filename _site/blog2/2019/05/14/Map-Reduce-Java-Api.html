@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Perry</title>
+    <meta name="viewport" content="width=device-width. initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+
+<body>
+
+<header>
+    <h1 class="logo">PososikTeam</h1>
+    <nav class="menu-top">
+    <ul>
+        <li><a href="/" >main</a> </li>
+        <li><a href="/blog">blog </a> </li>
+        <li><a href="/neural_network">neural network</a></li>
+        <li><a href="/lab">labs</a></li>
+    </ul>
+</nav>
+
+    
+</header>
+<main class="blog">
+
+    
+<div class="my_text">
+Hadoop и все его подсистемы написанны на java, поэтому все его java api богаты.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-02.jpg" class="center" /></p>
+
+<div class="my_text">
+Один из основных классов Job - создает объекты задачи.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-03.jpg" class="center" /></p>
+
+<div class="my_text">
+Наследовать наш маппер мы должны от класса Mapper, и реализовать там функцию void map(K, V, Context). 
+Context используется для передачи статистики jobtracker, осуществлять запись выходных данных, также можно из context можно получить информацию о задаче.
+<br />
+В функции  setup можно что-то проинициализировать до мапперов(например открыть файл).
+
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-04.jpg" class="center" /></p>
+
+<div class="my_text">
+Наследуем наш редюсер от класса Reducer и реализуем там функцию reduce.
+<br />
+Iterable не хранит как по себе все значения можно только пробегать по ним(например нельзя сразу узнать количество данных)
+сделано это, чтобы при больших данных память не переполнялась.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-05.jpg" class="center" /></p>
+
+<div class="my_text">
+Наследуем наш партишн от Partitioner и наследуемся от Partitioner которая возвращает номер редюсера.
+<br />
+numPartitions - число редюсеров 
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-06.jpg" class="center" /></p>
+
+<div class="my_text">
+Псевдокод подсчёта слов в тексе. docid - номер строки, text - текст строки.
+В редюсер передаём  в качестве ключа слово и в качестве значения итератор из единичек.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-07.jpg" class="center" /></p>
+
+<div class="my_text">
+Реализация на java. getConf() - получает объект конфигурации и WordCount - название задачи.
+Далее нужно определить где определяется функциональность задачи (setJarBuClass).
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-08.jpg" class="center" /></p>
+
+<div class="my_text">
+Далее нужно определить входные пути. И определить формат с помщью которого нужно прочитать файлы!
+<br />
+Вместо TextInputFormat может быть любой класс наследуемый от InputFormat. TextInputFormat - готовый класс 
+у которого ключ -номерстроки(LongWritable) а значение сама строка(Text).
+
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-09.jpg" class="center" /></p>
+
+<div class="my_text">
+Темерь мы должны описать выходные данные. Определяем путь выходных данных, формат выходных данных,
+ключь и значение выходных данных, а также типы оправки ключей и значений для мап если они отличаются отредюсера.
+
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-10.jpg" class="center" /></p>
+
+<div class="my_text">
+Определение маппера и редюсера для задачи.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-11.jpg" class="center" /></p>
+
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-12.jpg" class="center" /></p>
+
+<div class="my_text">
+Рассмотрим полнй текс программы (нам нужно реализовывать класс) переобпределить класс run.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-13.jpg" class="center" /></p>
+
+<div class="my_text">
+main()
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-14.jpg" class="center" /></p>
+
+<div class="my_text">
+Класс Mapper. IntWritable - целое число, Text - текст, ImmutableBytesWritable - массив байтов.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-15.jpg" class="center" /></p>
+
+<div class="my_text">
+Реализация Mapper. tokenizer разбивает по словам, записываем пару ключь значение через 
+write в context.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-16.jpg" class="center" /></p>
+
+<div class="my_text">
+Класс Reducer. Выходные значения маппера должны быть входными для релюсера!
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-17.jpg" class="center" /></p>
+
+<div class="my_text">
+Реализация Mapper. tokenizer разбивает по словам, записываем пару ключь значение через 
+write в context.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-18.jpg" class="center" /></p>
+
+<p>Про Combiner.
+<img src="/assets/images/MapReduce_API/MapReduce_API-19.jpg" class="center" /></p>
+
+<div class="my_text">
+Используются другие типы данных так как нужно их кодировать и раскодировать для хадупа.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-20.jpg" class="center" /></p>
+
+<div class="my_text">
+Что делать если нам нужен свой тип данных( например хотим передовать координаты х и y и передовать её в качестве ключа)
+<br />
+Можно написать так x@y но разделитель не доджне встречатся в других данных, при этом нужно будет парсить данные в дальнейшем.
+<br />
+ОБЫЧНО ТАКОЙ СПОСОБ НЕ ИСПОЛЬЗУЕТСЯ!
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-21.jpg" class="center" /></p>
+
+<div class="my_text">
+ПРАВИЛЬНЫЙ СПОСОБО НАСЛЕДОВАНИЕ ОТ Writable(Comprable)
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-22.jpg" class="center" /></p>
+
+<div class="my_text">
+Split данных!  Существуют  уже готовые реализации например FileSplit &amp; TableSplit.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-23.jpg" class="center" /></p>
+
+<div class="my_text">
+Class InputFormat. Должны быть реализованы два метода getSplits - возвращает list объектов инпутсплит,
+createRecordReader() - как прочитать inputsplit
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-24.jpg" class="center" /></p>
+
+<div class="my_text">
+NLineFormat - ограничевает количество строк, DBInputFormat - для баз данных, TableInputFormat - Hadoop базы данных.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-25.jpg" class="center" /></p>
+
+<div class="my_text">
+Class OutputFormat - должен проверять ошибки для задачи(например если файл занят для записи 
+то он должен создавать новый и записывать их). 
+<br />
+RecordWriter - объект для записи(каким образом данные будут записаны)
+<br />
+OutputCommiter - для востановления связи после сбоя.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-26.jpg" class="center" /></p>
+
+<div class="my_text">
+NullOutputFormat -  когда данные не выводятся а пишутся в какой то файл например.
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-27.jpg" class="center" /></p>
+
+<div class="my_text">
+Процесс передачи данных от маппера в редюсер, этот процесс очень важен так как он может занимать большую часть времени работы программы.
+
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-28.jpg" class="center" />
+<img src="/assets/images/MapReduce_API/MapReduce_API-29.jpg" class="center" />
+<img src="/assets/images/MapReduce_API/MapReduce_API-30.jpg" class="center" /></p>
+
+<p>Запуск программы на API.
+<img src="/assets/images/MapReduce_API/MapReduce_API-31.jpg" class="center" /></p>
+<div class="my_text">
+Процесс отладки. Обычно это вывод сообщений(вывод в лог файл) или использование счётчиков т.к программы осуществляется
+параллельно.
+
+</div>
+<p><img src="/assets/images/MapReduce_API/MapReduce_API-32.jpg" class="center" /></p>
+
+
+</main>
+
+<footer>
+    <nav class="menu-bottom">
+    <ul>
+        <li><a href="/" >main</a> </li>
+        <li><a href="/blog">blog </a> </li>
+        <li><a href="/neural_network">neural network</a></li>
+        <li><a href="/lab">labs</a></li>
+    </ul>
+</nav>
+
+    <div class="social">
+        <ul>
+            <li><a href="https://github.com/PososikTeam"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username"></span></a>
+            </li>
+            <li><a href="https://kaggle.com/lolik228"><span class="icon icon--kaggle"><svg height="64" viewBox="0 0 32 32" width="64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><clipPath id="a"><path d="m31.5 15.978h289v130.044h-289z"/></clipPath><path clip-path="url(#a)" d="m105.75 102.968c-.06.238-.298.357-.713.357h-7.937c-.477 0-.89-.208-1.248-.625l-13.106-16.672-3.655 3.477v12.93c0 .595-.298.892-.892.892h-6.152c-.595 0-.892-.297-.892-.892v-58.935c0-.593.297-.89.892-.89h6.153c.594 0 .892.298.892.89v36.288l15.692-15.87c.416-.415.832-.624 1.248-.624h8.204c.356 0 .593.15.713.445.12.357.09.624-.09.803l-16.585 16.046 17.297 21.488c.237.238.297.535.18.892" fill="#20beff" transform="matrix(.527027 0 0 .527027 -30.632288 -22.45559)"/></svg></span><span class="username"></span></a>
+            </li>
+        </ul>
+    </div>
+    <h1 class="logo">PososikTeam</h1>
+</footer>
+</body>
+
+
+</html>
